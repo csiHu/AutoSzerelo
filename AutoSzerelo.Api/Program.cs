@@ -1,4 +1,6 @@
 using AutoSzerelo.Api;
+using AutoSzerelo.Api.Repositories;
+using AutoSzerelo.Api.Services;
 using Microsoft.EntityFrameworkCore;
 using Serilog;
 
@@ -17,7 +19,12 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlite(builder.Configuration.GetConnectionString("AutoSzereloDb")));
 
+builder.Services.AddScoped<IUgyfelRepository, UgyfelRepository>();
+builder.Services.AddScoped<IUgyfelService, UgyfelService>();
+
 var app = builder.Build();
+
+app.UseExceptionHandler("/error");
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
