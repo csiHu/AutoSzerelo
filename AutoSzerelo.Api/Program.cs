@@ -21,6 +21,8 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 
 builder.Services.AddScoped<IUgyfelRepository, UgyfelRepository>();
 builder.Services.AddScoped<IUgyfelService, UgyfelService>();
+builder.Services.AddScoped<IMunkaRepository, MunkaRepository>();
+builder.Services.AddScoped<IMunkaService, MunkaService>();
 
 var app = builder.Build();
 

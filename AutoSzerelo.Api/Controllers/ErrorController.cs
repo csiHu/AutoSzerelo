@@ -15,11 +15,11 @@ public class ErrorController : ControllerBase
 
         var exception = feature.Error;
 
-        if (exception is EntityNotFoundException)
+        return exception switch
         {
-            return NotFound();
-        }
-
-        return Problem(detail: exception.Message);
+            EntityNotFoundException => NotFound(),
+            InvalidOperationException => BadRequest(exception.Message),
+            _ => Problem(detail: exception.Message)
+        };
     }
 }

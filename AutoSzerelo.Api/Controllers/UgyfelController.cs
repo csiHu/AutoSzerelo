@@ -1,6 +1,7 @@
 using AutoSzerelo.Api.Mappers;
 using AutoSzerelo.Api.Services;
 using AutoSzerelo.Contracts.Ugyfelek;
+using AutoSzerelo.Contracts.Munkak;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AutoSzerelo.Api.Controllers;
@@ -11,11 +12,13 @@ public class UgyfelController : ControllerBase
 {
     private readonly ILogger<UgyfelController> _logger;
     private readonly IUgyfelService _ugyfelService;
+    private readonly IMunkaService _munkaService;
 
-    public UgyfelController(ILogger<UgyfelController> logger, IUgyfelService ugyfelService)
+    public UgyfelController(ILogger<UgyfelController> logger, IUgyfelService ugyfelService, IMunkaService munkaService)
     {
         _logger = logger;
         _ugyfelService = ugyfelService;
+        _munkaService = munkaService;
     }
 
     [HttpGet]
@@ -48,6 +51,17 @@ public class UgyfelController : ControllerBase
         }
 
         return NotFound();
+    }
+
+    [HttpGet("{id}/munkak")]
+    public async Task<ActionResult<GetMunkakResponse>> GetUgyfelMunkai(Guid id)
+    {
+        var munkak = await _munkaService.GetUgyfelMunkaiAsync(id);
+        var aktivMunkakSzama = await _munkaService.GetAktivMunkakSzamaAsync();
+        return Ok(new GetMunkakResponse
+        {
+            Munkak = munkak.ToDto(munka => _munkaService.CalculateBecsultMunkaora(munka, aktivMunkakSzama)),
+        });
     }
 
     [HttpPost]
