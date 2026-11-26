@@ -1,5 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 using AutoSzerelo.Contracts.Enums;
+using AutoSzerelo.Contracts.Validations;
 
 namespace AutoSzerelo.Contracts.Munkak;
 
@@ -12,7 +13,7 @@ public class UpdateMunkaRequest
     [RegularExpression(@"^[A-Z]{3}-\d{3}$")]
     public string Rendszam { get; init; }
 
-    [Range(1900, 2100)]
+    [GyartasiEvRange]
     public int GyartasiEv { get; init; }
 
     [EnumDataType(typeof(MunkaKategoria))]
